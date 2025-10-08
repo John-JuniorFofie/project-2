@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createEmployee,
+  logInEmployee,
   getAllEmployees,
   getEmployeeById,
   updateEmployee,
@@ -12,7 +13,7 @@ const router = Router();
 router.post("/signUp", createEmployee);
 
 //login route
-router.post("/auth/logIn", createEmployee);
+router.post("/logIn", logInEmployee);
 
 router.get("/", getAllEmployees);
 

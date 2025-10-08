@@ -10,6 +10,8 @@ import Employee from "../Models/employee.model.ts";
 //     res.status(400).json({ message: "Failed to create employee", error });
 //   }
 // };
+
+//create new employee
 export const createEmployee = async (req: Request, res: Response) => {
   try {
     const {fullName, email, position, startDate, department} = req.body;
@@ -33,6 +35,22 @@ export const createEmployee = async (req: Request, res: Response) => {
     return;
   }
 };
+//Login employee
+export const logInEmployee = async (req: Request, res:Response)=>{
+  try{
+    const {email, password}= req.body;
+    if(!email|| !password){
+
+      return res.status(400).json({message:"please provide email and password"});
+    }
+    res. status(200).json({message: "login successful"});
+  
+    }
+    catch(error){
+    res.status(500).json({message:"provide the right credentials", error})
+};
+  };
+
 
 
 // Get all employees
