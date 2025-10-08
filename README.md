@@ -2,7 +2,9 @@
 
 //enpoints
 
-SignIn= http://localhost:5000/
+serverHealth= http://localhost:5000/
+
+SignUp: http://localhost:5000/api/vi/signUp
 
 LogIn = http://localhost:5000/api/v1/logIn
 
