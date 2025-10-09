@@ -41,13 +41,13 @@ export const logInEmployee = async (req: Request, res:Response)=>{
     const {email, password}= req.body;
     if(!email|| !password){
 
-      return res.status(400).json({message:"please provide email and password"});
+      return res.status(500).json({message:"please provide email and password"});
     }
     res. status(200).json({message: "login successful"});
   
     }
     catch(error){
-    res.status(500).json({message:"provide the right credentials", error})
+    res.status(400).json({message:"failed to logIn", error})
 };
   };
 
@@ -105,3 +105,4 @@ export const deleteEmployee = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to delete employee", error });
   }
 };
+
