@@ -121,4 +121,4 @@ Author
 
 John Fofie
  VIre Agency — Backend Developer
-🔗 GitHub: @John-JunioFofie
+🔗 GitHub: @John-JuniorFofie
