@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+
 const JWT_SECRET = process.env.JWT_SECRET || "apollonia_secret"; // use .env in real projects
 
 export interface AuthRequest extends Request {
