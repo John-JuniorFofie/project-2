@@ -56,7 +56,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 //Login employee
-export const logInEmployee = async (req: Request, res:Response)=>{
+export const logInUser = async (req: Request, res:Response)=>{
   try{
     const {email, password}= req.body;
     if(!email|| !password){

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
-  createEmployee,
-  logInEmployee,
+  createUser,
+  logInUser,
   getAllEmployees,
   getEmployeeById,
   updateEmployee,
@@ -39,7 +39,7 @@ const router = Router();
 
 
 
-router.post("/signUp", createEmployee);
+router.post("/signUp", createUser);
 
 //login route
 
@@ -70,7 +70,7 @@ router.post("/signUp", createEmployee);
  *       404:
  *         description: employeenot found
  */
-router.post("/logIn", logInEmployee);
+router.post("/logIn", logInUser);
 
 
 /**
