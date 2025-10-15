@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import Employee from "../Models/employee.model.ts";
+import Employee from "../Models/user.model.ts";
 import bcrypt from "bcrypt";
 
 // Create a new employee
@@ -12,22 +12,41 @@ import bcrypt from "bcrypt";
 //   }
 // };
 
-//create new employee
-export const createEmployee = async (req: Request, res: Response) => {
+
+//@route /
+//@desc Create new user
+//@access Public
+export const createUser = async (req: Request, res: Response) => {
   try {
-    const {fullName, email, position, startDate, department} = req.body;
+    const {fullName, email, position, startDate, department,password, role} = req.body;
+
+    //input validation
+    if(!fullName|| !email || !role || password ){
+      res.status(403).json({
+        success:false,
+        message:"Fill in all required inputs"
+      })
+    }
+
+    //check for user existence 
+    const  existingUser = await Employee.findOne(email);
+    console.log(existingUser)
+    
+    //save user
     const newUser = new Employee({
     fullName,
     email,
     position,
     startDate,
     department,
+    password,
     });
     await newUser.save();
 
     
     res.status(201).json({
-     success:true, message:"Employee created successfully",
+     success:true,
+      message:"Employee created successfully",
       data: newUser,
     });
 
@@ -99,9 +118,13 @@ export const deleteEmployee = async (req: Request, res: Response) => {
   try {
     const deleted = await Employee.findByIdAndDelete(req.params.id);
     if (!deleted) {
-      return res.status(404).json({ success:false,message: "Employee not found" });
+      return res.status(404).json({ 
+        success:false,
+        message: "Employee not found" });
     }
-    res.status(200).json({success:true, message: "Employee deleted successfully" });
+    res.status(200).json({
+      success:true, 
+      message: "Employee deleted successfully" });
   } catch (error) {
     res.status(500).json({ success:false, message: "Failed to delete employee", error });
   }

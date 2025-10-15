@@ -6,7 +6,7 @@ import {
   getEmployeeById,
   updateEmployee,
   deleteEmployee,
-} from "../controllers/employee.controller.ts";
+} from "../controllers/user.controller.ts";
 
 
 const router = Router();
