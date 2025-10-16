@@ -39,7 +39,7 @@ const router = Router();
 
 
 
-router.post("/signUp", createUser);
+router.post("/auth/signUp", createUser);
 
 //login route
 
@@ -70,7 +70,7 @@ router.post("/signUp", createUser);
  *       404:
  *         description: employeenot found
  */
-router.post("/logIn", logInUser);
+router.post("/auth/logIn", logInUser);
 
 
 /**
