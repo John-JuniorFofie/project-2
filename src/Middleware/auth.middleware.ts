@@ -2,10 +2,13 @@ import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 
-//const JWT_SECRET = process.env.JWT_SECRET || "apollonia_secret"; // use .env in real projects
+const JWT_SECRET = process.env.JWT_SECRET || "apollonia_secret"; // use .env in real projects
 
 export interface AuthRequest extends Request {
-  user?: string| jwt.jwtPayload // extend request to hold user data
+  user?: string| jwt.JwtPayload {
+    userId
+    role
+  } // extend request to hold user data
 }
 
 const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
