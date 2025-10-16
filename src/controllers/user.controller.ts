@@ -95,6 +95,15 @@ export const logInUser = async (req: Request, res:Response)=>{
           message:"User cannot be found"
         });
       }
+      //check password
+      const validPassword = await bcrypt.compare(password, existingUser.password);
+      if(!validPassword){
+        res.status(400).json({
+          success:false,
+          message:"Invalid Credentials"
+        });
+        return
+      }
     // create JWT token
     const accessToken = jwt.sign({
       userId: existingUser._id,
