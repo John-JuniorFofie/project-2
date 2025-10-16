@@ -30,19 +30,28 @@ const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
     jwt.verify(token, process.env.ACESS_TOKEN_SECRET as string,(error, user)=>{
       if (error){
         res.status(403).json({
-          success:
-        })
+          success:false,
+          message: "Forbidden Invalid token"
+        });
+        return;
       }
-    })
-    const decoded = jwt.verify(token, JWT_SECRET);
-    let userId: string;
-    let role: string;
+      (req as any).user = user;
 
-    userId = decoded.userId;
-    req.user = { userId, role }; // attach user data to request
-    next();
+      next();
+    });
+    // const decoded = jwt.verify(token, JWT_SECRET);
+    // let userId: string;
+    // let role: string;
+
+    // userId = decoded.userId;
+    // req.user = { userId, role }; // attach user data to request
+    // next();
   } catch (error) {
-    return res.status(403).json({ message: "Invalid or expired token." });
+    return res.status(403).json({
+      success:false, 
+      message: "Invalid or expired token.", 
+      error:error
+      });
   }
 };
 
