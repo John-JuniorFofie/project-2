@@ -1,13 +1,14 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
+
 
 
 const JWT_SECRET = process.env.JWT_SECRET || "apollonia_secret"; // use .env in real projects
 
 export interface AuthRequest extends Request {
-  user?: string| jwt.JwtPayload {
-    userId
-    role
+  user?:{
+    userId: string,
+    role: string
   } // extend request to hold user data
 }
 
@@ -19,14 +20,26 @@ const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
   }
 
   const token = authHeader.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ message: "Access denied. No token provided." });
-  }
-
   try {
+    if (!token) {
+      return res.status(401).json({
+       message: "Access denied. No token provided." 
+      });
+    }
+
+    jwt.verify(token, process.env.ACESS_TOKEN_SECRET as string,(error, user)=>{
+      if (error){
+        res.status(403).json({
+          success:
+        })
+      }
+    })
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // attach user data to request
+    let userId: string;
+    let role: string;
+
+    userId = decoded.userId;
+    req.user = { userId, role }; // attach user data to request
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid or expired token." });

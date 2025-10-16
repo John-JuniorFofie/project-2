@@ -104,7 +104,7 @@ export const logInUser = async (req: Request, res:Response)=>{
     }, ACCESS_TOKEN_SECRET as string, {expiresIn: "1h"});
 
     //Remove password before sending a response
-    const userWithoutPassword = existingUser.tobject() as any;
+    const userWithoutPassword = existingUser.toObject() as any;
     delete userWithoutPassword.password;
 
     res. status(200).json({
