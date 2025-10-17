@@ -141,7 +141,7 @@ export const getAllEmployees = async (req: AuthRequest, res: Response) => {
       })
     }
     const employees = await Employee.find();
-    if(!employees || employees.length ===0){
+    if(!employees || Employee.length ===0){
       return res.status(404).json({
         success:false,
         message:"No employee found"
@@ -158,47 +158,89 @@ export const getAllEmployees = async (req: AuthRequest, res: Response) => {
 };
 
 // Get a single employee by ID
-export const getEmployeeById = async (req: Request, res: Response) => {
+export const getEmployeeById = async (req: AuthRequest, res: Response) => {
   try {
-    const employee = await Employee.findById(req.params.id);
-    if (!employee) {
-      return res.status(404).json({success:false, message: "Employee not found" });
+    const {userId} = (req as any).user;
+    if(!userId){
+      return res.status(401).json({
+        success:false,
+        message:"Unauthorized access"
+      })
     }
-    res.status(200).json(employee);
+    const employees = await Employee.findById(req.params.id);
+    if (!employees || Employee.length ===0) {
+       return res.status(404).json({
+        success:false,
+        message:"No employee found"
+      })
+    }
+      res.status(200).json({
+      success:true,
+      message:"Employees fetched successfully",
+      data:employees
+      });
+    res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({success:false, message: "Error retrieving employee", error });
   }
 };
 
 // Update employee details
-export const updateEmployee = async (req: Request, res: Response) => {
+export const updateEmployee = async (req: AuthRequest, res: Response) => {
   try {
+    const {userId} = (req as any).user;
+    if(!userId){
+      return res.status(401).json({
+        success:false,
+        message:"Unauthorized access"
+      })
+    }     
+
     const updatedEmployee = await Employee.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    if (!updatedEmployee) {
-      return res.status(404).json({success:false, message: "Employee not found" });
+    if (!updatedEmployee || Employee.length ===0) {
+      return res.status(401).json({
+        success:false,
+        message:"no Emloyee found"
+      });
     }
+    res.status(200).json({
+      success:true,
+      message:"Employee updated successfully",
+      data:updatedEmployee
+    })
     res.status(200).json(updatedEmployee);
+    
   } catch (error) {
     res.status(400).json({success:false, message: "Failed to update employee", error });
   }
 };
 
 // Delete employee
-export const deleteEmployee = async (req: Request, res: Response) => {
+export const deleteEmployee = async (req: AuthRequest, res: Response) => {
   try {
+    const {userId} = (req as any).user;
     const deleted = await Employee.findByIdAndDelete(req.params.id);
-    if (!deleted) {
+    if (!userId){
+      return res.status(401).json({
+        success:false,
+        message:"Unauthorized access",
+      })
+    }
+    if (!deleted || Employee.length ===0) {
       return res.status(404).json({ 
         success:false,
         message: "Employee not found" });
     }
     res.status(200).json({
       success:true, 
-      message: "Employee deleted successfully" });
+      message: "Employee deleted successfully" ,
+      data: deleted
+    });
+     
   } catch (error) {
     res.status(500).json({ success:false, message: "Failed to delete employee", error });
   }

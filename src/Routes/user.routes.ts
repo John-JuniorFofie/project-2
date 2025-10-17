@@ -112,7 +112,7 @@ router.get("/", authenticate,authorizeRoles("HR"), getAllEmployees);
  *         description: Unauthorized - missing or invalid token
  */
 
-router.get("/:id", getEmployeeById);
+router.get("/:id", authenticate,authorizeRoles("HR"), getEmployeeById);
 /**
  * @swagger
  * /users/{id}:
@@ -149,7 +149,7 @@ router.get("/:id", getEmployeeById);
  *       404:
  *         description: User not found
  */
-router.put("/:id", updateEmployee);
+router.put("/:id",authenticate,authorizeRoles("HR"), updateEmployee);
 /**
  * @swagger
  * /users/{id}:
@@ -173,6 +173,6 @@ router.put("/:id", updateEmployee);
  *       404:
  *         description: User not found
  */
-router.delete("/:id", deleteEmployee);
+router.delete("/:id",authenticate,authorizeRoles("HR"), deleteEmployee);
 
 export default router;
