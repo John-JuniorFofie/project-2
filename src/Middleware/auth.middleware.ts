@@ -1,19 +1,14 @@
-import type { Request, Response, NextFunction } from "express";
+import type  { Request, Response, NextFunction } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 
 
 
 const JWT_SECRET = process.env.JWT_SECRET || "apollonia_secret"; // use .env in real projects
 
-export interface AuthRequest extends Request {
-  user?:{
-    userId: string,
-    role: string
-  } // extend request to hold user data
-}
 
-const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers["authorization"];
+
+const authenticate = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers["authorization"] as any;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Access denied. No token provided." });
@@ -27,17 +22,19 @@ const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
       });
     }
 
-    jwt.verify(token, process.env.ACESS_TOKEN_SECRET as string,(error, user)=>{
-      if (error){
-        res.status(403).json({
-          success:false,
-          message: "Forbidden Invalid token"
-        });
-        return;
-      }
-      (req as any).user = user;
+   jwt.verify(
+  token,
+  process.env.ACCESS_TOKEN_SECRET as string,
+  (error: jwt.VerifyErrors | null, user: any) => {
+    if (error) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden: Invalid token",
+      });
+    }
 
-      next();
+    (req as any).user = user;
+    next();
     });
     // const decoded = jwt.verify(token, JWT_SECRET);
     // let userId: string;

@@ -7,6 +7,8 @@ import {
   updateEmployee,
   deleteEmployee,
 } from "../controllers/user.controller.ts";
+import authenticate from "../Middleware/auth.middleware.ts";
+import {authorizeRoles} from "../Middleware/rbac.middleware.ts";
 
 
 const router = Router();
@@ -85,7 +87,7 @@ router.post("/auth/logIn", logInUser);
  */
 
 
-router.get("/", getAllEmployees);
+router.get("/", authenticate,authorizeRoles("HR"), getAllEmployees);
 /**
  * @swagger
  * /users/{id}:

@@ -3,6 +3,7 @@ import Employee from "../Models/user.model.ts";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import jwt from 'jsonwebtoken'
+import type { AuthRequest } from "../config/Helper/helper.ts";
 
   
 dotenv.config({ path: "./.env" });
@@ -118,7 +119,9 @@ export const logInUser = async (req: Request, res:Response)=>{
 
     res. status(200).json({
       success:true, 
-      message: "login successful"});
+      message: "login successful",
+      token: accessToken,
+    });
   
   } catch(error){
     res.status(400).json({success:false, message:"failed to logIn", error})
@@ -128,10 +131,27 @@ export const logInUser = async (req: Request, res:Response)=>{
 
 
   // Get all employees
-export const getAllEmployees = async (req: Request, res: Response) => {
+export const getAllEmployees = async (req: AuthRequest, res: Response) => {
   try {
+    const {userId} = (req as any).user;
+    if(!userId){
+      return res.status(401).json({
+        success:false,
+        message:"Unauthorized access"
+      })
+    }
     const employees = await Employee.find();
-    res.status(200).json(employees);
+    if(!employees || employees.length ===0){
+      return res.status(404).json({
+        success:false,
+        message:"No employee found"
+      })
+    }
+    res.status(200).json({
+      success:true,
+      message:"Employees fetched successfully",
+      data:employees
+    });
   } catch (error) {
     res.status(500).json({success:false, message: "Failed to fetch employees", error });
   }
